@@ -1,6 +1,18 @@
 from .u2if import Device
 from . import u2if_const as report_const
+from enum import Enum
 
+class DriveMode(Enum):
+    """Drive Mode Enumeration"""
+
+    PUSH_PULL = None
+    OPEN_DRAIN = None
+
+class Direction(Enum):
+    """Direction Enumeration"""
+
+    INPUT = None
+    OUTPUT = None
 
 class Pin:
     IN = 0
@@ -30,11 +42,11 @@ class Pin:
 
     def init(self, mode, pull=None, value=None):
         config_pull = 0x00
-        if mode == self.IN and pull == self.PULL_UP:
+        if mode == Direction.INPUT and pull == self.PULL_UP:
             config_pull = 0x01
-        elif mode == self.IN and pull == self.PULL_DOWN:
+        elif mode == Direction.INPUT and pull == self.PULL_DOWN:
             config_pull = 0x02
-        direction_conf = 0x00 if mode == self.IN else 0x01
+        direction_conf = 0x00 if mode == Direction.INPUT else 0x01
         res = self._device.send_report(bytes([report_const.GPIO_INIT_PIN, self.id, direction_conf, config_pull]))
         if res[1] != report_const.OK:
             raise RuntimeError("Pin init error.")
@@ -90,3 +102,6 @@ class Pin:
             raise RuntimeError("Remove irq error.")
         self._device.register_callback(self.id, callback)
         self.has_irq = True
+    def switch_to_output(self, value=False, drive_mode=DriveMode.PUSH_PULL):
+        #Drive mode implemented for argument sake. not actually used
+        self.init(Direction.OUTPUT,self.PULL_UP,value)

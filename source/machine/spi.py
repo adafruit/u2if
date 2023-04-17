@@ -5,6 +5,7 @@ from . import u2if_const as report_const
 class SPI(object):
     def __init__(self, *, spi_index=0):
         self.spi_index = spi_index
+        self._locked = False
         self._initialized = False
         self._device = Device()
 
@@ -80,4 +81,18 @@ class SPI(object):
         res = self._device.read_hid(report_id)
         if res[1] != report_const.OK:
             raise RuntimeError("SPI write error.")
+    def try_lock(self):
+        """Attempt to grab the lock. Return True on success, False if the lock is already taken."""
+        if self._locked:
+            return False
+        self._locked = True
+        return True
 
+    def unlock(self):
+        """Release the lock so others may use the resource."""
+        if self._locked:
+            self._locked = False
+        else:
+            raise ValueError("Not locked")
+    def configure(self,baudrate: int = 100000, polarity: int = 0, phase: int = 0, bits: int = 8) -> None:
+        self.init(baudrate)
