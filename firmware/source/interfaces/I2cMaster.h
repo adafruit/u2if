@@ -20,6 +20,7 @@ protected:
     CmdStatus write(const uint8_t *cmd);
     CmdStatus writeFromUart(const uint8_t *cmd);
     CmdStatus read(const uint8_t *cmd, uint8_t *ret);
+    CmdStatus writeThenRead(const uint8_t *report, uint8_t *ret);
     uint8_t getInstIndex();
 
     i2c_inst_t *_i2cInst;

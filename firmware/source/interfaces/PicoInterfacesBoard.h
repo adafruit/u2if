@@ -54,6 +54,7 @@
 enum CmdStatus {
     OK = 0x01,
     NOK = 0x02,
+    OTHER_PLACEHOLDER = 0xDE,
     NOT_FINISHED = 0xFE, // INTERNAL
     NOT_CONCERNED = 0xFF
 };
@@ -166,6 +167,8 @@ namespace Report {
         I2C0_READ = 0x83,
         // | I2C0_WRITE_FROM_UART | ADDR | NB_BYTES[4] L.Endian | => First | I2C0_WRITE_FROM_UART | CmdStatus::OK | and after the CDC stream | I2C0_WRITE_FROM_UART | CmdStatus::OK |
         I2C0_WRITE_FROM_UART = 0x84,
+        // | I2C0_WRITE_THEN_READ | ADDR | SEND_STOP_R | NB_BYTES_W | NB_BYTES_R | PAYLOAD_W => | I2C0_WRITE_THEN_READ | CmdStatus::OK | PAYLOAD_R |
+        I2C0_WRITE_THEN_READ = 0x85,
 
         // I2C1: 0x9X
         I2C0_I2C1_OFFSET = 0x10,
@@ -174,6 +177,7 @@ namespace Report {
         I2C1_WRITE = I2C0_WRITE + I2C0_I2C1_OFFSET,
         I2C1_READ = I2C0_READ + I2C0_I2C1_OFFSET,
         I2C1_WRITE_FROM_UART = I2C0_WRITE_FROM_UART + I2C0_I2C1_OFFSET,
+        I2C1_WRITE_THEN_READ = I2C0_WRITE_THEN_READ + I2C0_I2C1_OFFSET,
 
         // WS2812B (LED)
         // | WS2812B_INIT |
