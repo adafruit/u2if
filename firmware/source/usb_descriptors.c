@@ -79,6 +79,11 @@
   #define USB_PRD "KB2040 Kee Boar U2IF"
   #define USB_VID 0x239A
   #define USB_PID 0x0105
+#elif BOARD == WAVESHARE_RP2040_ONE
+  #define USB_MFG "Waveshare"
+  #define USB_PRD "RP2040 One U2IF"
+  #define USB_VID 0x2E8A
+  #define USB_PID 0x103A
 #elif BOARD == PICO
   #define USB_MFG "Pico"
   #define USB_PRD "U2IF"

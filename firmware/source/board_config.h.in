@@ -17,6 +17,7 @@
 #define FEATHER_RFM     7
 #define FEATHER_CAN     8
 #define KB2040          9
+#define WAVESHARE_RP2040_ONE      10
 
 
 #define BOARD ${BOARD}
@@ -220,6 +221,33 @@
   #define U2IF_SPI0_CK 18
   #define U2IF_SPI0_MOSI 19
   #define U2IF_SPI0_MISO 20
+  // UART0
+  #define UART0_ENABLED 1
+  #define U2IF_UART0_TX 0
+  #define U2IF_UART0_RX 1
+
+//---------------------------------------------------------
+// RP2040 One (Waveshare)
+//---------------------------------------------------------
+#elif BOARD == WAVESHARE_RP2040_ONE
+  // I2C0
+  #define I2C0_ENABLED 1
+  #define U2IF_I2C0_SDA 4
+  #define U2IF_I2C0_SCL 5
+  // I2C1
+  #define I2C1_ENABLED 1
+  #define U2IF_I2C1_SDA 2
+  #define U2IF_I2C1_SCL 3
+  // SPI0
+  #define SPI0_ENABLED 1
+  #define U2IF_SPI0_CK 6
+  #define U2IF_SPI0_MOSI 7
+  #define U2IF_SPI0_MISO 8
+  // SPI1
+  #define SPI1_ENABLED 1
+  #define U2IF_SPI1_CK 10
+  #define U2IF_SPI1_MOSI 11
+  #define U2IF_SPI1_MISO 12
   // UART0
   #define UART0_ENABLED 1
   #define U2IF_UART0_TX 0
