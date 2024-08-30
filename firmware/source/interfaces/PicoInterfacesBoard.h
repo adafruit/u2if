@@ -54,7 +54,6 @@
 enum CmdStatus {
     OK = 0x01,
     NOK = 0x02,
-    OTHER_PLACEHOLDER = 0xDE,
     NOT_FINISHED = 0xFE, // INTERNAL
     NOT_CONCERNED = 0xFF
 };
