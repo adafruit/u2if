@@ -32,7 +32,7 @@ jobs:
           cmake -DBOARD=QT2040_TRINKEY .. ; make ; mv u2if.uf2 u2if_trinkey.uf2
           ls -l u2if_*.uf2
       - name: Add Build Artifacts to CI Run
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: firmware_uf2s
           path: firmware/source/build/u2if_*.uf2
