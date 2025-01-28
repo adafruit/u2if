@@ -32,6 +32,8 @@ CmdStatus I2CMaster::process(uint8_t const *cmd, uint8_t response[64]) {
         status = read(cmd, response);
     } else if(cmd[0] == (Report::ID::I2C0_WRITE_FROM_UART + i2cIndex * Report::ID::I2C0_I2C1_OFFSET)) {
         status = writeFromUart(cmd);
+    } else if(cmd[0] == (Report::ID::I2C0_WRITE_THEN_READ + i2cIndex * Report::ID::I2C0_I2C1_OFFSET)) {
+        status = writeThenRead(cmd, response);
     }
 
     return status;
@@ -161,5 +163,55 @@ CmdStatus I2CMaster::writeFromUart(const uint8_t *cmd){
     flushStreamRx();
     _totalRemainingBytesToSend = convertBytesToUInt32(&cmd[2]);
     _currentStreamAddress = cmd[1];
+    return CmdStatus::OK;
+}
+
+CmdStatus I2CMaster::writeThenRead(const uint8_t *report, uint8_t *ret){
+    uint nbytes_w = report[3]; // Number of bytes to write
+    uint nbytes_r = report[4]; // Number of bytes to read
+    //printf("i2c write addr=%d size=%d => ", report[1], nbytes);
+    
+    // Whether to send a stop condition after the read (active low, will be false if sending stop condition)
+    bool noStop_r = report[2] == 0x01 ? false : true;
+    
+
+    int nbWritten = i2c_write_blocking(
+        _i2cInst,
+        report[1], // device addr
+        report + 5, //src
+        nbytes_w, //len
+        true // No stop on write
+    );
+
+    //printf("i2c write res=%d\n", nbWritten);
+    if (nbWritten == PICO_ERROR_GENERIC) {
+        // Device address was not acknowledged
+        return CmdStatus::NOK;
+    }
+    else if (nbWritten != static_cast<int>(nbytes_w)) {
+        // Number of bytes written was not correct.
+        // This might happen if the device NACKs a byte, halting the transaction.
+        return CmdStatus::NOK;
+    }
+  
+    
+    //printf("i2c read addr=%d size=%d\n", report[1], report[3]);
+
+    int nbRead = i2c_read_blocking(
+        _i2cInst,
+        report[1], // addr
+        ret + 2, //dst
+        nbytes_r, //len
+        noStop_r // Send stop condition after read?
+    );
+    
+    if (nbRead == PICO_ERROR_GENERIC) {
+        // Device address was not acknowledged
+        CmdStatus::NOK;
+    }
+    if(nbRead != nbytes_r){
+        // Number of bytes read was not correct.
+        CmdStatus::NOK;
+    }
     return CmdStatus::OK;
 }
