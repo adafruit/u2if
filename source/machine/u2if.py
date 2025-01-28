@@ -15,6 +15,7 @@ COMPATIBLE_BOARD_PID_VID = [
     (0x239a, 0x0105),  # Adafruit KB2040
     (0x239a, 0x0109),  # Adafruit QT2040 Trinket
     (0x239a, 0x00f7),  # Adafruit QTPY
+    (0x2e8a, 0x103a)   # Waveshare RP2040 One
 ]
 
 

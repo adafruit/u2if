@@ -34,4 +34,5 @@ build feather_epd FEATHER_EPD 0 1 1000 0
 build feather_rfm FEATHER_RFM 0 1 1000 0
 build feather_can FEATHER_CAN 0 1 1000 0
 build kb2040 KB2040 0 1 1000 0
+build rp2040_one RP2040_ONE 0 0 1000 0
 
